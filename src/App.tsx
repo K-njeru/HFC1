@@ -1,0 +1,113 @@
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import './App.css';
+import { parseRawData, getUniqueValues, type RawTransaction } from './data/data';
+import { type Transaction } from './types';
+import Header from './components/Header';
+import Controls from './components/Controls';
+import MetricsGrid from './components/MetricsGrid';
+import ChartsGrid from './components/ChartsGrid';
+import DataTable from './components/DataTable';
+import Papa, { type ParseConfig } from 'papaparse';
+
+const currentDate = new Date(2025, 8, 29); // September 29, 2025
+
+const App: React.FC = () => {
+  const [dateRange, setDateRange] = useState<string>('2000');
+  const [transactionType, setTransactionType] = useState<string>('all');
+  const [accountType, setAccountType] = useState<string>('all');
+  const [branchCode, setBranchCode] = useState<string>('all');
+  const [parsedData, setParsedData] = useState<Transaction[]>([]);
+  const [uniqueTransactionTypes, setUniqueTransactionTypes] = useState<string[]>([]);
+  const [uniqueAccountTypes, setUniqueAccountTypes] = useState<string[]>([]);
+  const [uniqueBranchIds, setUniqueBranchIds] = useState<number[]>([]);
+
+  const loadCSV = useCallback(async () => {
+    console.log('Refreshing CSV...');
+    try {
+      const response = await fetch('/Comprehensive_Banking_Database.csv');
+      console.log('Response OK:', response.ok);
+      if (!response.ok) throw new Error('Failed to fetch CSV: ' + response.statusText);
+      const text = await response.text();
+      console.log('CSV Text Length:', text.length);
+      Papa.parse<RawTransaction>(text, {
+        header: true,
+        complete: (result) => {
+          console.log('Raw Data:', result.data);
+          const rawData = result.data as RawTransaction[];
+          const data = parseRawData(rawData);
+          console.log('Parsed Data:', data);
+          setParsedData(data);
+          setUniqueTransactionTypes(getUniqueValues(data, 'transactionType') as string[]);
+          setUniqueAccountTypes(getUniqueValues(data, 'accountType') as string[]);
+          setUniqueBranchIds(getUniqueValues(data, 'branchId') as number[]);
+          console.log('Unique Transaction Types:', uniqueTransactionTypes);
+          console.log('Unique Account Types:', uniqueAccountTypes);
+          console.log('Unique Branch IDs:', uniqueBranchIds);
+          console.log('Parsed Data Length:', data.length);
+        },
+        error: (error: Papa.ParseError, file?: string) => {
+          console.error('Error parsing CSV:', error, file);
+        },
+      } as ParseConfig<RawTransaction>);
+    } catch (error) {
+      console.error('Error loading CSV:', error);
+    }
+  }, []); // Empty dependency array to avoid re-creation unless needed
+
+  useEffect(() => {
+    loadCSV();
+  }, [loadCSV]);
+
+  const filteredData = useMemo(() => {
+    const days = parseInt(dateRange);
+    const cutoff = new Date(currentDate);
+    cutoff.setDate(cutoff.getDate() - days);
+
+    const result = parsedData.filter((t: Transaction) => {
+      const dateMatch = t.transactionDate >= cutoff;
+      const typeMatch = transactionType === 'all' || t.transactionType === transactionType;
+      const accountMatch = accountType === 'all' || t.accountType === accountType;
+      const branchMatch = branchCode === 'all' || t.branchId === parseInt(branchCode);
+
+      return dateMatch && typeMatch && accountMatch && branchMatch;
+    });
+    console.log('Filtered Data Length:', result.length, 'Data:', result.map(t => ({ date: t.transactionDate, type: t.transactionType })));
+    return result;
+  }, [dateRange, transactionType, accountType, branchCode, parsedData]);
+
+  const metrics = useMemo(() => {
+    const totalTransactions = filteredData.length;
+    const totalVolume = filteredData.reduce((sum, t) => sum + Math.abs(t.transactionAmount), 0);
+    const avgTransaction = totalTransactions > 0 ? totalVolume / totalTransactions : 0;
+    const activeCustomers = new Set(filteredData.map(t => t.customerId)).size;
+
+    return { totalTransactions, totalVolume, avgTransaction, activeCustomers };
+  }, [filteredData]);
+
+  console.log('Filtered Data Length:', filteredData.length);
+
+  return (
+    <div className="dashboard-container">
+      <Header />
+      <Controls
+        dateRange={dateRange}
+        setDateRange={setDateRange}
+        transactionType={transactionType}
+        setTransactionType={setTransactionType}
+        accountType={accountType}
+        setAccountType={setAccountType}
+        branchCode={branchCode}
+        setBranchCode={setBranchCode}
+        uniqueTransactionTypes={uniqueTransactionTypes}
+        uniqueAccountTypes={uniqueAccountTypes}
+        uniqueBranchIds={uniqueBranchIds}
+        onRefresh={loadCSV} // Pass the loadCSV function as the refresh callback
+      />
+      <MetricsGrid metrics={metrics} />
+      <ChartsGrid data={filteredData} />
+      <DataTable data={filteredData.slice(0, 50)} />
+    </div>
+  );
+};
+
+export default App;

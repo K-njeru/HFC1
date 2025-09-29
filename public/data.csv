@@ -1,0 +1,11 @@
+Customer ID,First Name,Last Name,Age,Gender,Address,City,Contact Number,Email,Account Type,Account Balance,Date Of Account Opening,Last Transaction Date,TransactionID,Transaction Date,Transaction Type,Transaction Amount,Account Balance After Transaction,Branch ID,Loan ID,Loan Amount,Loan Type,Interest Rate,Loan Term
+1,Joshua,Hall,45,Male,Address_1,Fort Worth,19458794854,joshua.hall@kag.com,Current,1313.38,5/26/2006,4/23/2023,1,12/7/2024,Withdrawal,1457.61,2770.99,43,1,32200.06,Mortgage,2.64,36
+2,Mark,Taylor,47,Female,Address_2,Louisville,19458794855,mark.taylor@kag.com,Current,5988.46,3/2/2006,1/27/2023,2,4/27/2025,Deposit,1660.99,7649.45,63,2,47743.52,Auto,2.48,36
+3,Joseph,Flores,25,Female,Address_3,Philadelphia,19458794856,joseph.flores@kag.com,Current,8277.88,7/19/2015,1/1/2023,3,4/5/2025,Deposit,839.91,7437.97,82,3,47981.31,Auto,7.84,24
+4,Kevin,Lee,52,Other,Address_4,Oklahoma City,19458794857,kevin.lee@kag.com,Savings,7487.21,1/30/2008,8/2/2023,4,7/28/2025,Withdrawal,4908.89,12396.1,41,4,4482.8,Personal,7.21,48
+5,Linda,Johnson,68,Other,Address_5,Phoenix,19458794858,linda.johnson@kag.com,Savings,6993.55,5/25/2021,3/27/2023,5,1/16/2025,Transfer,589.07,6404.48,9,5,1092.33,Mortgage,5.37,12
+6,Charles,Torres,52,Male,Address_6,El Paso,19458794859,charles.torres@kag.com,Savings,9295.64,12/21/2015,6/4/2023,6,4/21/2025,Withdrawal,4914.67,4380.97,20,6,48039.24,Mortgage,1.45,24
+7,Joshua,Garcia,43,Male,Address_7,Dallas,19458794860,joshua.garcia@kag.com,Current,4005.72,7/7/2022,3/21/2023,7,11/22/2024,Deposit,3534.9,470.82,21,7,27230.51,Mortgage,5.25,24
+8,Christopher,Baker,47,Male,Address_8,Memphis,19458794861,christopher.baker@kag.com,Savings,1458.45,12/14/2022,3/1/2023,8,8/10/2025,Deposit,454.87,1003.58,25,8,35319.63,Mortgage,8.51,12
+9,Daniel,Moore,52,Male,Address_9,Indianapolis,19458794862,daniel.moore@kag.com,Current,1109.3,4/29/2012,11/5/2023,9,9/28/2025,Withdrawal,768.56,340.74,66,9,45717.26,Mortgage,1.1,60
+10,William,Robinson,55,Other,Address_10,Washington,19458794863,william.robinson@kag.com,Current,9554.62,12/20/2021,2/5/2023,10,12/29/2024,Deposit,1641.59,11196.21,30,10,22224.58,Auto,1.92,24
