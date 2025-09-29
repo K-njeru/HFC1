@@ -159,7 +159,9 @@ body {
   display: flex;
   flex-direction: column;
 }
-
+.chart-container:hover {
+  transform: translateY(-4px);
+}
 .chart-wrapper {
   width: 100%;
   flex: 1;
