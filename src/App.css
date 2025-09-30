@@ -1,44 +1,11 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-body {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(135deg, #0056a6 0%, #ff7a00 100%);
-  min-height: 100vh;
-}
 .dashboard-container {
 
   max-width: 2400px;
   margin: 0 auto;
   padding: 2rem;
-}
-
-.header {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
-.header-logo {
-  width: 50px; 
-  height: auto;
-  margin-right: 15px;
-}
-.header h1 {
-  margin: 0 0 0.5rem 0;
-  color: #1a202c;
-  font-size: 2.5rem;
-  font-weight: 700;
-}
-
-.header p {
-  margin: 0;
-  color: #4a5568;
-  font-size: 1.1rem;
 }
 
 .controls-section {
@@ -176,53 +143,6 @@ body {
   font-weight: 600;
   color: #1a202c;
   margin-bottom: 1rem;
-}
-
-.data-table-container {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  overflow-x: auto;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-  background-color: #fff; /* Solid white background for consistency */
-}
-
-.data-table th,
-.data-table td {
-  color: #000000; /* Black text for all cells and headers */
-  padding: 0.75rem;
-  text-align: left;
-  border-bottom: 1px solid #e2e8f0;
-  box-sizing: border-box;
-}
-
-.data-table th {
-  background: #f7fafc; /* Light gray background */
-  font-weight: 600;
-  color: #000000 !important; /* Force black text, overriding #2d3748 */
-  position: sticky;
-  top: 0;
-  z-index: 1; /* headers stay above content during scroll */
-}
-
-.data-table tr:hover {
-  background: #f7fafc;
-  color: #000000; /* Maintain black text on hover */
-}
-
-/* visibility in focus or other states */
-.data-table th:focus,
-.data-table th:hover {
-  color: #000000 !important;
 }
 
 .loading {
