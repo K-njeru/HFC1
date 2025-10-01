@@ -1,21 +1,29 @@
-import React from 'react';
+"use client"
+
+import type React from "react"
+
+import { Card, CardContent } from "../components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select"
+import { Button } from "../components/ui/button"
+import { Label } from "../components/ui/label"
+import { RefreshCw } from "lucide-react"
 
 interface Props {
-  dateRange: string;
-  setDateRange: React.Dispatch<React.SetStateAction<string>>;
-  transactionType: string;
-  setTransactionType: React.Dispatch<React.SetStateAction<string>>;
-  accountType: string;
-  setAccountType: React.Dispatch<React.SetStateAction<string>>;
-  branchCode: string;
-  setBranchCode: React.Dispatch<React.SetStateAction<string>>;
-  uniqueTransactionTypes: string[];
-  uniqueAccountTypes: string[];
-  uniqueBranchIds: number[];
-  onRefresh: () => void; // Added prop for refresh callback
+  dateRange: string
+  setDateRange: React.Dispatch<React.SetStateAction<string>>
+  transactionType: string
+  setTransactionType: React.Dispatch<React.SetStateAction<string>>
+  accountType: string
+  setAccountType: React.Dispatch<React.SetStateAction<string>>
+  branchCode: string
+  setBranchCode: React.Dispatch<React.SetStateAction<string>>
+  uniqueTransactionTypes: string[]
+  uniqueAccountTypes: string[]
+  uniqueBranchIds: number[]
+  onRefresh: () => void
 }
 
-const Controls: React.FC<Props> = ({
+const Controls = ({
   dateRange,
   setDateRange,
   transactionType,
@@ -28,57 +36,88 @@ const Controls: React.FC<Props> = ({
   uniqueAccountTypes,
   uniqueBranchIds,
   onRefresh,
-}) => (
-  <div className="controls-section">
-    <div className="controls-grid">
-      <div className="control-group">
-        <label htmlFor="dateRange">Date Range</label>
-        <select id="dateRange" value={dateRange} onChange={(e) => setDateRange(e.target.value)}>
-          <option value="7">Last 7 days</option>
-          <option value="30">Last 30 days</option>
-          <option value="90">Last 90 days</option>
-          <option value="1000">Last year</option> 
-          {/* // altered to fit 2023 timeframes */}
-        </select>
-      </div>
-      <div className="control-group">
-        <label htmlFor="transactionType">Transaction Type</label>
-        <select id="transactionType" value={transactionType} onChange={(e) => setTransactionType(e.target.value)}>
-          <option value="all">All Types</option>
-          {uniqueTransactionTypes.map((type) => (
-            <option key={type} value={type}>
-              {type.charAt(0).toUpperCase() + type.slice(1)}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="control-group">
-        <label htmlFor="accountType">Account Type</label>
-        <select id="accountType" value={accountType} onChange={(e) => setAccountType(e.target.value)}>
-          <option value="all">All Accounts</option>
-          {uniqueAccountTypes.map((type) => (
-            <option key={type} value={type}>
-              {type.charAt(0).toUpperCase() + type.slice(1)}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="control-group">
-        <label htmlFor="branchCode">Branch</label>
-        <select id="branchCode" value={branchCode} onChange={(e) => setBranchCode(e.target.value)}>
-          <option value="all">All Branches</option>
-          {uniqueBranchIds.map((id) => (
-            <option key={id} value={id.toString()}>
-              Branch {id.toString().padStart(3, '0')}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="control-group">
-        <button className="btn" onClick={onRefresh}>🔄 Refresh Data</button>
-      </div>
-    </div>
-  </div>
-);
+}: Props) => {
+  return (
+    <Card>
+      <CardContent className="pt-6">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="dateRange">Date Range</Label>
+            <Select value={dateRange} onValueChange={setDateRange}>
+              <SelectTrigger id="dateRange">
+                <SelectValue placeholder="Select date range" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="7">Last 7 days</SelectItem>
+                <SelectItem value="30">Last 30 days</SelectItem>
+                <SelectItem value="90">Last 90 days</SelectItem>
+                <SelectItem value="1000">Last year</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-export default Controls;
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="transactionType">Transaction Type</Label>
+            <Select value={transactionType} onValueChange={setTransactionType}>
+              <SelectTrigger id="transactionType">
+                <SelectValue placeholder="Select type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                {uniqueTransactionTypes.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="accountType">Account Type</Label>
+            <Select value={accountType} onValueChange={setAccountType}>
+              <SelectTrigger id="accountType">
+                <SelectValue placeholder="Select account" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Accounts</SelectItem>
+                {uniqueAccountTypes.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="branchCode">Branch</Label>
+            <Select value={branchCode} onValueChange={setBranchCode}>
+              <SelectTrigger id="branchCode">
+                <SelectValue placeholder="Select branch" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Branches</SelectItem>
+                {uniqueBranchIds.map((id) => (
+                  <SelectItem key={id} value={id.toString()}>
+                    Branch {id.toString().padStart(3, "0")}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label className="invisible">Refresh</Label>
+            <Button onClick={onRefresh} variant="outline" className="w-full bg-transparent">
+              <RefreshCw className="mr-2 h-4 w-4" />
+              Refresh Data
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+export default Controls
