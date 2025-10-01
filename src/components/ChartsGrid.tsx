@@ -183,7 +183,7 @@ const ChartsGrid = ({ data }: Props) => {
                   <Sector {...props} outerRadius={outerRadius + 10} />
                 )}
               >
-                {typeData.map((entry, index) => (
+                {typeData.map((_, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}
