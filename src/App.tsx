@@ -103,7 +103,7 @@ const App: React.FC = () => {
         <Sidebar isCollapsed={isSidebarCollapsed} onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)} />
         <div className={`transition-all duration-300 ${isSidebarCollapsed ? "md:ml-16" : "md:ml-64"}`}>
           <Header />
-          <div className="dashboard-container">
+          <div className="dashboard-container flex flex-col gap-6 m-8">
             <Controls
               dateRange={dateRange}
               setDateRange={setDateRange}
@@ -120,7 +120,7 @@ const App: React.FC = () => {
             />
             <MetricsGrid metrics={metrics} />
             <ChartsGrid data={filteredData} />
-            <DataTable data={filteredData.slice(0, 50)} />
+            <DataTable data={filteredData} />
           </div>
         </div>
       </div>

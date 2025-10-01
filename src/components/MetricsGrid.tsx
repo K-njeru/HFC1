@@ -20,7 +20,7 @@ const MetricsGrid = ({ metrics }: Props) => {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Total Transactions</CardTitle>
-          <Activity className="h-4 w-4 text-muted-foreground" />
+          <Activity className="h-4 w-4 text-primary" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{metrics.totalTransactions.toLocaleString()}</div>
@@ -31,7 +31,7 @@ const MetricsGrid = ({ metrics }: Props) => {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Transaction Volume</CardTitle>
-          <DollarSign className="h-4 w-4 text-muted-foreground" />
+          <DollarSign className="h-4 w-4 text-primary" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
@@ -48,7 +48,7 @@ const MetricsGrid = ({ metrics }: Props) => {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Average Transaction</CardTitle>
-          <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          <TrendingUp className="h-4 w-4 text-primary" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
@@ -65,7 +65,7 @@ const MetricsGrid = ({ metrics }: Props) => {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Active Customers</CardTitle>
-          <Users className="h-4 w-4 text-muted-foreground" />
+          <Users className="h-4 w-4 text-primary" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{metrics.activeCustomers.toLocaleString()}</div>

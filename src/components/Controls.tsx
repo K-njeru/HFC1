@@ -110,7 +110,7 @@ const Controls = ({
           <div className="flex flex-col gap-2">
             <Label className="invisible">Refresh</Label>
             <Button onClick={onRefresh} variant="outline" className="w-full bg-transparent">
-              <RefreshCw className="mr-2 h-4 w-4" />
+              <RefreshCw className="mr-2 h-4 w-4 text-primary" />
               Refresh Data
             </Button>
           </div>
