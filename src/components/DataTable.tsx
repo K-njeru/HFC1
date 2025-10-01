@@ -118,7 +118,7 @@ const DataTable = ({ data }: Props) => {
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">Rows per page:</span>
             <Select value={pageSize.toString()} onValueChange={handlePageSizeChange}>
-              <SelectTrigger className="w-[70px]">
+              <SelectTrigger className="w-[70px] text-primary">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -135,10 +135,10 @@ const DataTable = ({ data }: Props) => {
             </span>
             <div className="flex gap-1">
               <Button variant="outline" size="icon" onClick={goToPreviousPage} disabled={currentPage === 1}>
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className="h-4 w-4 text-primary" />
               </Button>
               <Button variant="outline" size="icon" onClick={goToNextPage} disabled={currentPage === totalPages}>
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-4 w-4 text-primary" />
               </Button>
             </div>
           </div>

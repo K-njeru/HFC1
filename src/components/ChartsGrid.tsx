@@ -23,7 +23,9 @@ import {
   YAxis,
   CartesianGrid,
   Cell,
+  Sector,
 } from "recharts";
+import type { PieSectorDataItem } from "recharts/types/polar/Pie";
 import type { Transaction } from "../types";
 
 interface Props {
@@ -31,11 +33,11 @@ interface Props {
 }
 
 const COLORS = [
-  "hsl(var(--chart-1))",
-  "hsl(var(--chart-2))",
-  "hsl(var(--chart-3))",
-  "hsl(var(--chart-4))",
-  "hsl(var(--chart-5))",
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)",
 ];
 
 const ChartsGrid = ({ data }: Props) => {
@@ -122,7 +124,7 @@ const ChartsGrid = ({ data }: Props) => {
             config={{
               volume: {
                 label: "Volume",
-                color: "hsl(var(--chart-1))",
+                color: "var(--chart-1)",
               },
             }}
             className="h-[300px]"
@@ -160,18 +162,26 @@ const ChartsGrid = ({ data }: Props) => {
                 label: "Count",
               },
             }}
-            className="h-[300px]"
+            className="mx-auto aspect-square h-[300px]"
           >
             <PieChart>
-              <ChartTooltip content={<ChartTooltipContent />} />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
               <Pie
                 data={typeData}
                 dataKey="count"
                 nameKey="type"
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                label
+                innerRadius={60}
+                strokeWidth={5}
+                activeIndex={0}
+                activeShape={({
+                  outerRadius = 0,
+                  ...props
+                }: PieSectorDataItem) => (
+                  <Sector {...props} outerRadius={outerRadius + 10} />
+                )}
               >
                 {typeData.map((entry, index) => (
                   <Cell
@@ -239,21 +249,33 @@ const ChartsGrid = ({ data }: Props) => {
             config={{
               count: {
                 label: "Customers",
-                color: "hsl(var(--chart-3))",
+                color: "var(--chart-1)",
               },
             }}
             className="h-[300px]"
           >
-            <BarChart data={ageData}>
-              <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-              <XAxis dataKey="age" className="text-xs" />
-              <YAxis className="text-xs" />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <Bar
-                dataKey="count"
-                fill="var(--color-count)"
-                radius={[4, 4, 0, 0]}
+            <BarChart
+              data={ageData}
+              accessibilityLayer
+              margin={{
+                top: 20,
+              }}
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="age"
+                className="text-xs"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tickFormatter={(value) => value.slice(0, 3)}
               />
+              <YAxis className="text-xs" />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Bar dataKey="count" fill="var(--color-count)" radius={8} />
             </BarChart>
           </ChartContainer>
         </CardContent>

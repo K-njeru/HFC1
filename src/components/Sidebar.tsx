@@ -19,7 +19,7 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
         className="absolute -right-3 top-6 bg-sidebar border border-sidebar-border rounded-full p-1 hover:bg-sidebar-accent transition-colors"
         aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
       >
-        {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+        {isCollapsed ? <ChevronRight className="w-4 h-4 text-primary" /> : <ChevronLeft className="w-4 h-4 text-primary" />}
       </button>
 
       <div className="p-4 border-b border-sidebar-border">
@@ -39,7 +39,7 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
           className="flex items-center p-3 text-sidebar-accent-foreground bg-sidebar-accent rounded-lg transition-colors font-medium"
           title="Dashboard"
         >
-          <LayoutDashboard className="w-5 h-5 flex-shrink-0" />
+          <LayoutDashboard className="w-5 h-5 flex-shrink-0 text-primary" />
           {!isCollapsed && <span className="ml-3">Dashboard</span>}
         </a>
         <a
@@ -47,7 +47,7 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
           className="flex items-center p-3 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg transition-colors"
           title="Transactions"
         >
-          <CreditCard className="w-5 h-5 flex-shrink-0" />
+          <CreditCard className="w-5 h-5 flex-shrink-0 text-primary" />
           {!isCollapsed && <span className="ml-3">Transactions</span>}
         </a>
         <a
@@ -55,7 +55,7 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
           className="flex items-center p-3 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg transition-colors"
           title="Reports"
         >
-          <BarChart3 className="w-5 h-5 flex-shrink-0" />
+          <BarChart3 className="w-5 h-5 flex-shrink-0 text-primary" />
           {!isCollapsed && <span className="ml-3">Reports</span>}
         </a>
         <a
@@ -63,7 +63,7 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
           className="flex items-center p-3 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg transition-colors"
           title="Customers"
         >
-          <Users className="w-5 h-5 flex-shrink-0" />
+          <Users className="w-5 h-5 flex-shrink-0 text-primary" />
           {!isCollapsed && <span className="ml-3">Customers</span>}
         </a>
         <a
@@ -71,7 +71,7 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
           className="flex items-center p-3 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg transition-colors"
           title="Settings"
         >
-          <Settings className="w-5 h-5 flex-shrink-0" />
+          <Settings className="w-5 h-5 flex-shrink-0 text-primary" />
           {!isCollapsed && <span className="ml-3">Settings</span>}
         </a>
       </nav>

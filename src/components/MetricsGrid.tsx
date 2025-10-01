@@ -23,7 +23,7 @@ const MetricsGrid = ({ metrics }: Props) => {
           <Activity className="h-4 w-4 text-primary" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{metrics.totalTransactions.toLocaleString()}</div>
+          <div className="text-2xl font-bold text-primary">{metrics.totalTransactions.toLocaleString()}</div>
           <p className="text-xs text-muted-foreground">All transaction records</p>
         </CardContent>
       </Card>
@@ -34,7 +34,7 @@ const MetricsGrid = ({ metrics }: Props) => {
           <DollarSign className="h-4 w-4 text-primary" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
+          <div className="text-2xl font-bold text-primary">
             $
             {metrics.totalVolume.toLocaleString(undefined, {
               minimumFractionDigits: 2,
@@ -51,7 +51,7 @@ const MetricsGrid = ({ metrics }: Props) => {
           <TrendingUp className="h-4 w-4 text-primary" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
+          <div className="text-2xl font-bold text-primary">
             $
             {metrics.avgTransaction.toLocaleString(undefined, {
               minimumFractionDigits: 2,
@@ -68,7 +68,7 @@ const MetricsGrid = ({ metrics }: Props) => {
           <Users className="h-4 w-4 text-primary" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{metrics.activeCustomers.toLocaleString()}</div>
+          <div className="text-2xl font-bold text-primary">{metrics.activeCustomers.toLocaleString()}</div>
           <p className="text-xs text-muted-foreground">Unique customer accounts</p>
         </CardContent>
       </Card>

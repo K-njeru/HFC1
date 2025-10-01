@@ -58,7 +58,7 @@ const App: React.FC = () => {
     } catch (error) {
       console.error("Error loading CSV:", error)
     }
-  }, [])
+  }, [uniqueAccountTypes, uniqueBranchIds, uniqueTransactionTypes])
 
   useEffect(() => {
     loadCSV()
