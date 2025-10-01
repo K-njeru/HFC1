@@ -1,166 +1,186 @@
-import React from 'react';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, BarElement, PolarAreaController, RadialLinearScale, Scale } from 'chart.js';
-import { Line, Doughnut, Bar, PolarArea } from 'react-chartjs-2';
-import { type Transaction } from '../types';
-import type { ChartOptions, ChartData, CoreScaleOptions, Tick } from 'chart.js'; // Use type-only import for CoreScaleOptions and Tick
+"use client"
 
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, BarElement, PolarAreaController, RadialLinearScale);
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../components/ui/chart"
+import { Line, LineChart, Bar, BarChart, Pie, PieChart, XAxis, YAxis, CartesianGrid, Cell } from "recharts"
+import type { Transaction } from "../types"
 
 interface Props {
-  data: Transaction[];
+  data: Transaction[]
 }
 
-const ChartsGrid: React.FC<Props> = ({ data }) => {
-  // Transaction Volume Over Time
-  const dailyVolume: { [date: string]: number } = {};
-  data.forEach((t) => {
-    const date = t.transactionDate.toISOString().split('T')[0];
-    dailyVolume[date] = (dailyVolume[date] || 0) + Math.abs(t.transactionAmount);
-  });
-  const sortedDates = Object.keys(dailyVolume).sort();
-  const labels = sortedDates.slice(-30); // Last 30 days for display
-  const volumeData = labels.map((date) => dailyVolume[date] || 0);
+const COLORS = [
+  "hsl(var(--chart-1))",
+  "hsl(var(--chart-2))",
+  "hsl(var(--chart-3))",
+  "hsl(var(--chart-4))",
+  "hsl(var(--chart-5))",
+]
 
-  const volumeChartData: ChartData<'line'> = {
-    labels: labels.map((date) => new Date(date).toLocaleDateString()),
-    datasets: [
-      {
-        label: 'Daily Volume',
-        data: volumeData,
-        borderColor: '#0056a6',
-        backgroundColor: 'rgba(0, 86, 166, 0.1)',
-        tension: 0.4,
-        fill: true,
-      },
-    ],
-  };
-  const volumeOptions: ChartOptions<'line'> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
-    scales: {
-      y: {
-        beginAtZero: true,
-        ticks: {
-          callback: function (
-            this: Scale<CoreScaleOptions>,
-            tickValue: string | number,
-            index: number,
-            ticks: Tick[]
-          ): string | number | null | undefined {
-            if (typeof tickValue === 'number') {
-              return '$' + tickValue.toLocaleString();
-            }
-            return tickValue;
-          },
-        },
-      },
-    },
-  };
+const ChartsGrid = ({ data }: Props) => {
+  // Transaction Volume Over Time
+  const dailyVolume: { [date: string]: number } = {}
+  data.forEach((t) => {
+    const date = t.transactionDate.toISOString().split("T")[0]
+    dailyVolume[date] = (dailyVolume[date] || 0) + Math.abs(t.transactionAmount)
+  })
+  const sortedDates = Object.keys(dailyVolume).sort()
+  const volumeData = sortedDates.slice(-30).map((date) => ({
+    date: new Date(date).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+    volume: dailyVolume[date] || 0,
+  }))
 
   // Transaction Types Distribution
-  const typeCounts: { [type: string]: number } = {};
+  const typeCounts: { [type: string]: number } = {}
   data.forEach((t) => {
-    typeCounts[t.transactionType] = (typeCounts[t.transactionType] || 0) + 1;
-  });
-  const typeChartData: ChartData<'doughnut'> = {
-    labels: Object.keys(typeCounts),
-    datasets: [{ data: Object.values(typeCounts), backgroundColor: ['#0056a6', '#ff7a00', '#4a90e2'] }],
-  };
-  const typeOptions: ChartOptions<'doughnut'> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: { legend: { position: 'bottom' as const } },
-  };
+    typeCounts[t.transactionType] = (typeCounts[t.transactionType] || 0) + 1
+  })
+  const typeData = Object.entries(typeCounts).map(([type, count]) => ({
+    type: type.charAt(0).toUpperCase() + type.slice(1),
+    count,
+  }))
 
   // Account Balance Distribution
-  const balanceRanges = { '0-1K': 0, '1K-5K': 0, '5K-10K': 0, '10K-25K': 0, '25K+': 0 };
+  const balanceRanges = { "0-1K": 0, "1K-5K": 0, "5K-10K": 0, "10K-25K": 0, "25K+": 0 }
   data.forEach((t) => {
-    const balance = t.accountBalance;
-    if (balance < 1000) balanceRanges['0-1K']++;
-    else if (balance < 5000) balanceRanges['1K-5K']++;
-    else if (balance < 10000) balanceRanges['5K-10K']++;
-    else if (balance < 25000) balanceRanges['10K-25K']++;
-    else balanceRanges['25K+']++;
-  });
-  const balanceChartData: ChartData<'bar'> = {
-    labels: Object.keys(balanceRanges),
-    datasets: [
-      {
-        label: 'Account Count',
-        data: Object.values(balanceRanges),
-        backgroundColor: 'rgba(0, 86, 166, 0.8)',
-        borderColor: '#0056a6',
-        borderWidth: 1,
-      },
-    ],
-  };
-  const balanceOptions: ChartOptions<'bar'> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
-    scales: { y: { beginAtZero: true } },
-  };
+    const balance = t.accountBalance
+    if (balance < 1000) balanceRanges["0-1K"]++
+    else if (balance < 5000) balanceRanges["1K-5K"]++
+    else if (balance < 10000) balanceRanges["5K-10K"]++
+    else if (balance < 25000) balanceRanges["10K-25K"]++
+    else balanceRanges["25K+"]++
+  })
+  const balanceData = Object.entries(balanceRanges).map(([range, count]) => ({
+    range,
+    count,
+  }))
 
   // Customer Demographics (Age Groups)
-  const ageGroups = { '18-25': 0, '26-35': 0, '36-45': 0, '46-55': 0, '56+': 0 };
+  const ageGroups = { "18-25": 0, "26-35": 0, "36-45": 0, "46-55": 0, "56+": 0 }
   data.forEach((t) => {
-    const age = t.age;
-    if (age <= 25) ageGroups['18-25']++;
-    else if (age <= 35) ageGroups['26-35']++;
-    else if (age <= 45) ageGroups['36-45']++;
-    else if (age <= 55) ageGroups['46-55']++;
-    else ageGroups['56+']++;
-  });
-  const demographicsChartData: ChartData<'polarArea'> = {
-    labels: Object.keys(ageGroups),
-    datasets: [
-      {
-        data: Object.values(ageGroups),
-        backgroundColor: [
-          'rgba(0, 86, 166, 0.8)',
-          'rgba(255, 122, 0, 0.8)',
-          'rgba(74, 144, 226, 0.8)',
-          'rgba(255, 159, 64, 0.8)',
-          'rgba(54, 162, 235, 0.8)',
-        ],
-      },
-    ],
-  };
-  const demographicsOptions: ChartOptions<'polarArea'> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: { legend: { position: 'bottom' as const } },
-  };
+    const age = t.age
+    if (age <= 25) ageGroups["18-25"]++
+    else if (age <= 35) ageGroups["26-35"]++
+    else if (age <= 45) ageGroups["36-45"]++
+    else if (age <= 55) ageGroups["46-55"]++
+    else ageGroups["56+"]++
+  })
+  const ageData = Object.entries(ageGroups).map(([age, count]) => ({
+    age,
+    count,
+  }))
 
   return (
-    <div className="charts-grid">
-      <div className="chart-container">
-        <div className="chart-title">Transaction Volume Over Time</div>
-        <div className="chart-wrapper">
-          <Line data={volumeChartData} options={volumeOptions} />
-        </div>
-      </div>
-      <div className="chart-container">
-        <div className="chart-title">Transaction Types Distribution</div>
-        <div className="chart-wrapper">
-          <Doughnut data={typeChartData} options={typeOptions} />
-        </div>
-      </div>
-      <div className="chart-container">
-        <div className="chart-title">Account Balance Distribution</div>
-        <div className="chart-wrapper">
-          <Bar data={balanceChartData} options={balanceOptions} />
-        </div>
-      </div>
-      <div className="chart-container">
-        <div className="chart-title">Customer Demographics</div>
-        <div className="chart-wrapper">
-          <PolarArea data={demographicsChartData} options={demographicsOptions} />
-        </div>
-      </div>
-    </div>
-  );
-};
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
+      {/* Transaction Volume Over Time */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Transaction Volume Over Time</CardTitle>
+          <CardDescription>Daily transaction volume for the last 30 days</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer
+            config={{
+              volume: {
+                label: "Volume",
+                color: "hsl(var(--chart-1))",
+              },
+            }}
+            className="h-[300px]"
+          >
+            <LineChart data={volumeData}>
+              <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+              <XAxis dataKey="date" className="text-xs" />
+              <YAxis className="text-xs" tickFormatter={(value) => `$${(value / 1000).toFixed(0)}K`} />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Line type="monotone" dataKey="volume" stroke="var(--color-volume)" strokeWidth={2} dot={false} />
+            </LineChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
 
-export default ChartsGrid;
+      {/* Transaction Types Distribution */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Transaction Types</CardTitle>
+          <CardDescription>Distribution of transaction types</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer
+            config={{
+              count: {
+                label: "Count",
+              },
+            }}
+            className="h-[300px]"
+          >
+            <PieChart>
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Pie data={typeData} dataKey="count" nameKey="type" cx="50%" cy="50%" outerRadius={100} label>
+                {typeData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
+
+      {/* Account Balance Distribution */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Account Balance Distribution</CardTitle>
+          <CardDescription>Number of accounts by balance range</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer
+            config={{
+              count: {
+                label: "Accounts",
+                color: "hsl(var(--chart-2))",
+              },
+            }}
+            className="h-[300px]"
+          >
+            <BarChart data={balanceData}>
+              <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+              <XAxis dataKey="range" className="text-xs" />
+              <YAxis className="text-xs" />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Bar dataKey="count" fill="var(--color-count)" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
+
+      {/* Customer Demographics */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Customer Demographics</CardTitle>
+          <CardDescription>Customer distribution by age group</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer
+            config={{
+              count: {
+                label: "Customers",
+                color: "hsl(var(--chart-3))",
+              },
+            }}
+            className="h-[300px]"
+          >
+            <BarChart data={ageData}>
+              <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+              <XAxis dataKey="age" className="text-xs" />
+              <YAxis className="text-xs" />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Bar dataKey="count" fill="var(--color-count)" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
+export default ChartsGrid
