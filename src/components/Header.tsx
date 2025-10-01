@@ -1,91 +1,193 @@
-import React from "react";
-import { Sun, Moon } from "lucide-react"; // Lucide React icons
+"use client";
 
-const Header: React.FC = () => {
-  // Mock state for theme toggle (replace with actual theme logic)
-  const [isDarkMode, setIsDarkMode] = React.useState(false);
+import {
+  Bell,
+  CreditCard,
+  Home,
+  LogOut,
+  Menu,
+  MessageSquareDot,
+  Settings,
+  Users,
+  CircleUser,
+} from "lucide-react";
 
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-    // Add logic to toggle dark/light mode (e.g., updating a theme context or class on the root element)
-  };
+import { useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
+import { Button } from "../components/ui/button";
+import { getInitials } from "../lib/utils";
+
+const demoUsers = [
+  {
+    name: "Alex Johnson",
+    email: "alex.johnson@hfcbank.com",
+    avatar: "https://i.pravatar.cc/150?img=12",
+  },
+  {
+    name: "Maria Lopez",
+    email: "maria.lopez@hfcbank.com",
+    avatar: "https://i.pravatar.cc/150?img=45",
+  },
+];
+
+export default function HeaderWithSidebar() {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [currentUser, setCurrentUser] = useState(demoUsers[0]);
 
   return (
-    <header
-      className={`${
-        isDarkMode ? "bg-gray-900" : "bg-white"
-      } backdrop-blur-md rounded-2xl p-6 mb-8 shadow-xl sticky top-0 z-10 transition-colors duration-300`}
-    >
-      <div className="flex items-center justify-between max-w-7xl mx-auto">
-        {/* Left: Logo and Title */}
-        <div className="flex items-center space-x-4">
-          <img
-            src="/hfc.png"
-            alt="Banking Analytics Logo"
-            className="w-10 h-10 object-contain"
-          />
-          <div>
-            <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-              HFC Bank
-            </h1>
-            <p
-              className={`text-sm ${
-                isDarkMode ? "text-gray-400" : "text-gray-600"
-              }`}
-            >
-              Real-time insights for financial success
-            </p>
-          </div>
-        </div>
-
-        {/* Middle: Search Bar */}
-        <div className="hidden md:flex flex-1 justify-center px-6">
-          <input
-            type="text"
-            placeholder="Search transactions, customers..."
-            className="w-full max-w-md px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        {/* Right: Profile and Theme Toggle */}
-        <div className="flex items-center space-x-6">
-          {/* User Profile */}
-          <div className="flex items-center space-x-3">
-            <img
-              src="https://i.pravatar.cc/40?img=12"
-              alt="User Avatar"
-              className="w-10 h-10 rounded-full border-2 border-blue-500 shadow"
-            />
-            <div className="hidden sm:block">
-              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                Alex Johnson
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                Relationship Manager
-              </p>
-            </div>
-          </div>
-
-          {/* Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            className={`p-2 rounded-full ${
-              isDarkMode
-                ? "bg-gray-800 text-yellow-400"
-                : "bg-gray-200 text-gray-800"
-            } hover:scale-105 transition-transform duration-200`}
-            aria-label="Toggle theme"
+    <div className="flex h-screen bg-background text-foreground">
+      {/* Sidebar */}
+      <aside
+        className={`${
+          sidebarOpen ? "w-64" : "w-20"
+        } transition-all duration-300 border-r border-border bg-card flex flex-col`}
+      >
+        <div className="flex items-center justify-between p-4">
+          <span className="text-lg font-semibold">
+            {sidebarOpen ? "🏦 HFC Bank" : "🏦"}
+          </span>
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
           >
-            {isDarkMode ? (
-              <Sun className="w-5 h-5" />
-            ) : (
-              <Moon className="w-5 h-5" />
-            )}
-          </button>
+            <Menu className="h-5 w-5" />
+          </Button>
         </div>
-      </div>
-    </header>
-  );
-};
+        <nav className="flex-1 p-2 space-y-2">
+          <Button variant="ghost" className="w-full justify-start">
+            <Home className="mr-2 h-4 w-4" /> {sidebarOpen && "Dashboard"}
+          </Button>
+          <Button variant="ghost" className="w-full justify-start">
+            <Users className="mr-2 h-4 w-4" /> {sidebarOpen && "Customers"}
+          </Button>
+          <Button variant="ghost" className="w-full justify-start">
+            <CreditCard className="mr-2 h-4 w-4" />{" "}
+            {sidebarOpen && "Transactions"}
+          </Button>
+          <Button variant="ghost" className="w-full justify-start">
+            <Settings className="mr-2 h-4 w-4" /> {sidebarOpen && "Settings"}
+          </Button>
+        </nav>
+      </aside>
 
-export default Header;
+      {/* Main area */}
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <header className="flex items-center justify-between border-b border-border bg-card px-6 py-3 shadow-sm">
+          <h1 className="text-xl font-semibold">Banking Analytics Dashboard</h1>
+
+          <div className="flex items-center space-x-4">
+            {/* Notifications */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="relative hover:bg-accent"
+                >
+                  <Bell className="h-5 w-5" />
+                  <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500"></span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-64">
+                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <MessageSquareDot className="mr-2 h-4 w-4" />
+                  New customer registered
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Large transaction flagged
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* User menu */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="flex items-center space-x-2">
+                  <Avatar className="h-8 w-8 rounded-lg">
+                    <AvatarImage src={currentUser.avatar} />
+                    <AvatarFallback className="rounded-lg">
+                      {getInitials(currentUser.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="hidden md:inline">{currentUser.name}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel className="p-2">
+                  <div className="flex items-center gap-2">
+                    <Avatar className="h-8 w-8 rounded-lg">
+                      <AvatarImage src={currentUser.avatar} />
+                      <AvatarFallback className="rounded-lg">
+                        {getInitials(currentUser.name)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-sm font-medium">{currentUser.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {currentUser.email}
+                      </p>
+                    </div>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  {demoUsers.map((user, idx) => (
+                    <DropdownMenuItem
+                      key={idx}
+                      onClick={() => setCurrentUser(user)}
+                    >
+                      <CircleUser className="mr-2 h-4 w-4" />
+                      Switch to {user.name}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <CircleUser />
+                    Account
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <CreditCard />
+                    Billing
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <MessageSquareDot />
+                    Notifications
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <LogOut />
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </header>
+
+        {/* Content */}
+        <main className="flex-1 p-6 bg-background">
+          <p className="text-muted-foreground">
+            Welcome, {currentUser.name}. This is your banking dashboard
+            workspace.
+          </p>
+        </main>
+      </div>
+    </div>
+  );
+}
