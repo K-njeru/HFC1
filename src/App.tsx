@@ -17,6 +17,10 @@ import { ThemeProvider } from "./contexts/ThemeContext"
 const now = new Date();
 const currentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
+console.log("Current Date:", currentDate.toISOString()); // logs YYYY-MM-DDT00:00:00.000Z
+console.log("Current Date (local):", currentDate.toLocaleDateString());
+
+
 const App: React.FC = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
   const [dateRange, setDateRange] = useState<string>("2000")
