@@ -14,7 +14,8 @@ import DataTable from "./components/DataTable"
 import Papa, { type ParseConfig } from "papaparse"
 import { ThemeProvider } from "./contexts/ThemeContext"
 
-const currentDate = new Date(2025, 8, 29) // September 29, 2025
+const now = new Date();
+const currentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
 const App: React.FC = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
